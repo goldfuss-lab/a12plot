@@ -1,0 +1,40 @@
+#!/bin/bash
+
+for F in $*
+do
+
+awk '
+NR>2     {print $1 FS $2 }
+    ' $F  | gnuplot -p -e "set term dumb ; plot '-' w l; "
+ echo "$F"
+
+awk '
+   NR>2  {print  $2 }
+    ' $F  | gnuplot -p -e "stats '-' ; "
+
+
+awk '
+NR>2     {print $1 FS $2 }
+    ' $F  | gnuplot -p -e "set term png ; set output '$F.png' ; plot '-' w l"
+
+
+#cat $F | gnuplot -p -e "set term dumb ; plot '-' w l"
+# a2mima  $F
+
+cat $F | awk  ' NR>2 {
+        AR[D++] = $2;   ARI[i++] = $1 } ;
+  END {
+       for (i in AR)                              {
+#       print "Index= " ARI[i] FS "FES= " AR[i]
+# find Minima
+#       min || min = AR[i] ;
+  if (AR[i-1] > AR[i] && AR[i+1] > AR[i] ) {
+      min[i]=AR[i] ; print "Index: " ARI[i] FS  "Minium: " FS min[i]} ;
+  if (AR[i-1] < AR[i] && AR[i+1] < AR[i] ) {
+      max[i]=AR[i] ; print "Index: " ARI[i] FS  "Maximum: " FS max[i]} ;
+
+                                                    }
+print "Ea="
+      }    '
+
+done
